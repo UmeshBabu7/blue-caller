@@ -13,3 +13,4 @@ class CustomUser(AbstractUser):
         if(hasattr(self,'customer')):
             return self.customer 
         return None
+        
