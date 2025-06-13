@@ -1,11 +1,14 @@
 from django.urls import path
 from .views import index , WorkerListView, WorkerDetailView, WorkerCreateView, CustomerCreateView, handle_login
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 
 urlpatterns=[
     path('', TemplateView.as_view(template_name="landing/index.html"), name='landing-page'),
+    path('contact/', views.contact_form, name='contact-form'),
     path('get-started/', WorkerListView.as_view(), name='worker-list'),
     path('account-setup/', handle_login, name='handle-login'),
     path('worker/<int:pk>/',WorkerDetailView.as_view(), name='worker-detail'),
@@ -20,3 +23,7 @@ urlpatterns=[
     path('complete-appointment/<int:appointment_id>/', views.complete_appointment, name='complete_appointment'),
     path('rate-worker/<int:appointment_id>/', views.rate_worker, name='rate_worker'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

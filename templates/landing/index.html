@@ -46,7 +46,7 @@
             <div class="row align-items-center">
               <div class="col-lg-12">
                 <nav class="navbar navbar-expand-lg">
-                  <a class="navbar-brand" href="index.html">
+                  <a class="navbar-brand" href="#home">
                     <img src={%static "landing/img/logo/logo1.png"%} alt="Logo" style="width: 200px; height: auto;" />
                   </a>
                   <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent6">
@@ -214,7 +214,7 @@
               <ul>
                 <li class="wow fadeInUp" data-wow-delay=".35s">
                   <i class="lni lni-checkmark-circle"></i>
-                  If you’re in need of expert help, we make it simple to find the right professional for the job. Whether it’s plumbing, electrical work, carpentry, or general repairs, our platform connects you with trusted, verified workers in your area. Get the help you need, when you need it.
+                  If you're in need of expert help, we make it simple to find the right professional for the job. Whether it's plumbing, electrical work, carpentry, or general repairs, our platform connects you with trusted, verified workers in your area. Get the help you need, when you need it.
                 </li>
                 <li class="wow fadeInUp" data-wow-delay=".4s">
                   <i class="lni lni-checkmark-circle"></i>
@@ -238,15 +238,24 @@
               <div class="col-xxl-5 col-xl-5 col-lg-7 col-md-10">
                   <div class="section-title text-center mb-50">
                       <h3 class="mb-15">Get in touch</h3>
-                      <p>Have any questions or need assistance? We’re here to help! Whether you're looking to book a service, need support with your account, or want to learn more about joining our platform, don't hesitate to reach out.</p>
+                      <p>Have any questions or need assistance? We're here to help! Whether you're looking to book a service, need support with your account, or want to learn more about joining our platform, don't hesitate to reach out.</p>
                   </div>
               </div>
           </div>
           <div class="row">
               <div class="col-lg-8">
                   <div class="contact-form-wrapper">
-                      <form action="" method="POST">  <!-- Update the action -->
-                          <!-- Include CSRF token for security -->
+                      <form action="{% url 'contact-form' %}" method="POST">
+                          {% csrf_token %}
+                          {% if messages %}
+                          <div class="messages">
+                              {% for message in messages %}
+                              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                  {{ message }}
+                              </div>
+                              {% endfor %}
+                          </div>
+                          {% endif %}
                           <div class="row">
                               <div class="col-md-6">
                                   <div class="single-input">
@@ -318,7 +327,7 @@
                                       <i class="lni lni-map-marker"></i>
                                   </div>
                                   <div class="text">
-                                      <p> Kathmandu College of Technology, Lokanthali, Bhaktapur </p>
+                                      <p>Kathmandu College of Technology, Bhaktapur</p>
                                   </div>
                               </div>
                           </div>
@@ -333,7 +342,7 @@
   <!-- ========================= footer style-4 start ========================= -->
   <footer class="footer footer-style-4">
       <div class="copyright-wrapper wow fadeInUp" data-wow-delay=".2s">
-          <p> Design and Developed by Student of BCA 2077, Kathmandu College of Technology </p>
+          <p>Design and Developed by Student of BCA 2077, Kathmandu College of Technology</p>
       </div>
   </footer>
   

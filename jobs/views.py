@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from jobs.models import Worker, Customer, Appointment, WorkerRating
+from jobs.models import Worker, Customer, Appointment, WorkerRating, Contact
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.contrib import messages
@@ -14,6 +14,7 @@ from jobs.templatetags.distance import calculate_distance
 from django.db.models import F, ExpressionWrapper, FloatField
 from datetime import datetime
 from phonenumber_field.formfields import PhoneNumberField
+from django.conf import settings
 
 def index(request):
     return HttpResponse("<h1>BlueCaller</h1>")
@@ -140,6 +141,13 @@ class WorkerCreateView(LoginRequiredMixin, CreateView):
     fields=['name','profile_pic','tagline','phone_number','bio','citizenship_image', 'certificate_file']
     success_url=reverse_lazy('worker-list')
 
+    def dispatch(self, request, *args, **kwargs):
+        # Check if user already has a worker profile
+        if hasattr(request.user, 'worker'):
+            messages.error(request, "You already have a worker profile.")
+            return redirect('worker-list')
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.owner=self.request.user
         form.instance.latitude = self.request.POST.get('latitude')
@@ -163,6 +171,13 @@ class CustomerCreateView(LoginRequiredMixin, CreateView):
     model = Customer
     fields=['name','profile_pic','phone_number']
     success_url=reverse_lazy('worker-list')
+
+    def dispatch(self, request, *args, **kwargs):
+        # Check if user already has a customer profile
+        if hasattr(request.user, 'customer'):
+            messages.error(request, "You already have a customer profile.")
+            return redirect('worker-list')
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):    
         form.instance.latitude = self.request.POST.get('latitude')
@@ -324,3 +339,77 @@ def rate_worker(request, appointment_id):
 
     # For GET requests, render a form for rating
     return render(request, 'jobs/rate_worker.html', {'appointment': appointment})
+
+def contact_form(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('number')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Save to database
+        contact = Contact.objects.create(
+            name=name,
+            email=email,
+            phone_number=phone_number,
+            subject=subject,
+            message=message
+        )
+
+        # Send email notification
+        try:
+            # Email to admin
+            admin_message = f'''
+            New Contact Form Submission:
+            
+            Name: {name}
+            Email: {email}
+            Phone: {phone_number}
+            Subject: {subject}
+            Message: {message}
+            
+            Submitted at: {contact.created_at}
+            '''
+            
+            # Send to admin email
+            send_mail(
+                f'New Contact Form Submission: {subject}',
+                admin_message,
+                settings.EMAIL_HOST_USER,  # From address
+                [settings.EMAIL_HOST_USER],  # To address (admin email)
+                fail_silently=False,
+            )
+
+            # Confirmation email to user
+            user_message = f'''
+            Dear {name},
+
+            Thank you for contacting Blue Caller. We have received your message and will get back to you soon.
+
+            Your message details:
+            Subject: {subject}
+            Message: {message}
+
+            Best regards,
+            Blue Caller Team
+            '''
+            
+            # Send confirmation to user
+            send_mail(
+                'Thank you for contacting Blue Caller',
+                user_message,
+                settings.EMAIL_HOST_USER,  # From address
+                [email],  # To address (user's email)
+                fail_silently=False,
+            )
+            
+            messages.success(request, 'Thank you for your message. We will get back to you soon!')
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Email sending failed: {str(e)}")
+            messages.warning(request, 'Your message was saved but we could not send a confirmation email.')
+
+        return redirect('landing-page')
+
+    return redirect('landing-page')
