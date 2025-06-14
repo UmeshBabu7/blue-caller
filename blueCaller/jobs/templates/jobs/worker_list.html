@@ -59,8 +59,8 @@
       <!-- Illustration -->
       <div class="md:w-1/2 flex justify-center">
         <img 
-          src="{% static 'landing/img/service-team.png' %}" 
-          alt="Service Team" 
+          src="{% static 'landing/img/logo/logo1.png' %}"
+          alt="BlueCaller Logo"
           class="w-full max-w-md h-auto transform hover:scale-105 transition duration-500"
           loading="lazy"
         >
@@ -69,29 +69,120 @@
   </div>
 </div>
 
-<!-- ✅ Owl Carousel Section -->
-<div class="m-3">
-  <h2 class="text-xl font-semibold text-gray-800 mb-4">BlueCaller - Our Services:</h2>
+<!-- Page Background and Container -->
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 py-10 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- BlueCaller Logo at the top -->
+    <div class="w-full flex flex-col items-center mt-6 mb-2">
+      <img src="{% static 'landing/img/logo/logo1.png' %}" alt="BlueCaller Logo" class="h-16 w-auto mx-auto mb-2">
+    </div>
 
-  <!-- ✅ Carousel Wrapper -->
-  <div class="owl-carousel" id="slider1">
-    {% for service in services %}
-      <a href="#" class="btn">
-        <div class="item text-center bg-white rounded-lg shadow p-4 hover:shadow-lg transition">
-          {% if service.image %}
-            <img src="{{ service.image.url }}" alt="{{ service.title }}" height="200px" class="mx-auto">
-          {% else %}
-            <img src="{% static 'app/images/noimage.png' %}" alt="No image" height="200px" class="mx-auto">
-          {% endif %}
-          <span class="font-bold block mt-2">{{ service.title }}</span>
-          <span class="text-sm block">₹{{ service.hourly_rate }} / hr</span>
-          <span class="text-xs text-gray-500">Est. Total: ₹{{ service.total_estimated_cost }}</span>
+    <!-- Main Heading -->
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-blue-800 mb-10 text-center drop-shadow-lg">BlueCaller - Our Services</h2>
+
+    <!-- Carousel Section -->
+    <div class="mb-12">
+      <div class="owl-carousel" id="slider1">
+        {% for service in services %}
+          <a href="#" class="block">
+            <div class="item text-center bg-white rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300 p-6">
+              {% if service.image %}
+                <img src="{{ service.image.url }}" alt="{{ service.title }}" class="mx-auto rounded-lg mb-4 object-cover h-40 w-full" style="max-width: 320px;">
+              {% else %}
+                <img src="{% static 'app/images/noimage.png' %}" alt="No image" class="mx-auto rounded-lg mb-4 object-cover h-40 w-full" style="max-width: 320px;">
+              {% endif %}
+              <span class="font-bold text-lg text-indigo-700 block mb-1">{{ service.title }}</span>
+              <span class="text-base block text-gray-700 mb-1">₹{{ service.hourly_rate }} / hr</span>
+              <span class="text-xs text-gray-500">Est. Total: ₹{{ service.total_estimated_cost }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Worker Cards Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      {% for worker in object_list %}
+      <a href="{% url 'worker-detail' worker.pk %}" class="group h-full">
+        <div class="bg-white bg-opacity-95 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out overflow-hidden flex flex-col h-full">
+          <div class="flex flex-col items-center p-6 flex-grow">
+            <!-- Name, Badge, Profession -->
+            <div class="w-full flex flex-col items-center mb-2">
+              <p class="text-lg font-extrabold text-indigo-900 mb-1 text-center">{{ worker.name }}</p>
+              {% if worker.verified %}
+              <span class="flex items-center px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                Verified
+              </span>
+              {% else %}
+              <span class="flex items-center px-2 py-0.5 rounded-full bg-red-100 text-red-700 text-xs font-semibold mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Not Verified
+              </span>
+              {% endif %}
+              <span class="italic text-gray-600 text-sm text-center">{{ worker.tagline }}</span>
+            </div>
+            <!-- Profile Image -->
+            <div class="flex-shrink-0 my-3">
+              {% if worker.profile_pic %}
+              <img class="w-20 h-20 object-cover rounded-full border-4 border-indigo-300 shadow-md" src="{{ worker.profile_pic.url }}" alt="Profile pic" loading="lazy">
+              {% else %}
+              <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-2xl border-4 border-indigo-200">
+                {{ worker.name|slice:":1" }}
+              </div>
+              {% endif %}
+            </div>
+            <!-- Divider -->
+            <div class="w-full border-t border-gray-100 my-3"></div>
+            <!-- Distance and Rating Row -->
+            <div class="w-full flex flex-col items-center mb-4">
+              <span class="text-blue-700 text-sm font-medium mb-1">{{ worker.distance|default_if_none:"" }}{% distance_if_customer worker %}</span>
+              <div class="flex flex-col items-center justify-center w-full my-3">
+                <div class="flex flex-col items-center bg-indigo-50 rounded-xl px-4 py-3 shadow-md border border-indigo-100 w-full">
+                  <div class="flex items-center justify-center space-x-2 mb-2">
+                    <!-- Stars -->
+                    <div class="flex items-center justify-center text-center" style="gap: 0.25rem;">
+                      {% for i in "12345" %}
+                        {% if worker.rating|default:0|floatformat:1 >= i %}
+                          <svg class="w-7 h-7 text-yellow-400 drop-shadow-md" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.049 9.394c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+                        {% elif worker.rating|default:0|floatformat:1 >= i|add:"-0.5" %}
+                          <svg class="w-7 h-7 text-yellow-400 drop-shadow-md" fill="currentColor" viewBox="0 0 20 20"><defs><linearGradient id="half"><stop offset="50%" stop-color="#facc15"/><stop offset="50%" stop-color="#e5e7eb"/></linearGradient></defs><path fill="url(#half)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.049 9.394c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+                        {% else %}
+                          <svg class="w-7 h-7 text-gray-300 drop-shadow-md" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.049 9.394c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                    <!-- Numeric Rating Inline -->
+                    <span class="ml-3 text-2xl font-extrabold text-indigo-700">{{ worker.rating|default:"0.0"|floatformat:1 }}</span>
+                    <span class="text-lg text-gray-600 font-semibold">/ 5</span>
+                  </div>
+                  <!-- Review Icon and Count -->
+                  <div class="flex items-center justify-center mt-1">
+                    <svg class="w-5 h-5 text-indigo-400 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                    <span class="text-base text-indigo-700 font-semibold">{{ worker.review_count|default:0 }}</span>
+                    <span class="text-sm text-gray-500 ml-1">review{{ worker.review_count|pluralize }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- View Details Button -->
+          <div class="bg-indigo-50 px-6 py-4 mt-auto">
+            <a href="{% url 'worker-detail' worker.pk %}" class="w-full block text-center bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 rounded-xl shadow transition">View Details</a>
+          </div>
         </div>
       </a>
-    {% endfor %}
+      {% empty %}
+      <div class="col-span-full text-center text-gray-500 py-12 text-lg">No workers found.</div>
+      {% endfor %}
+    </div>
   </div>
 </div>
-</div>
+
 <!-- Overall background and padding -->
 <div class="min-h-screen bg-gradient-to-tr from-indigo-50 via-purple-50 to-pink-50 py-12 px-6">
 

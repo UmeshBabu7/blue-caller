@@ -1,445 +1,894 @@
 {% load static %}
 <!DOCTYPE html>
-<html class="no-js" lang="">
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Blue Caller Landing Page</title>
-    <meta name="description" content="" />
+    <title>Blue Caller - Book Verified Skilled Workers</title>
+    <meta name="description" content="Book verified skilled workers for your home and business needs" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Place favicon.ico in the root directory -->
-    <script src="https://kit.fontawesome.com/ca5f35a7cf.js" crossorigin="anonymous"></script>
-    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="{% static 'landing/css/bootstrap-5.0.0-beta1.min.css' %}" />
     <link rel="stylesheet" href="{% static 'landing/css/LineIcons.2.0.css' %}"/>
     <link rel="stylesheet" href="{% static 'landing/css/tiny-slider.css' %}"/>
     <link rel="stylesheet" href="{% static 'landing/css/animate.css' %}"/>
-    <link rel="stylesheet" href="{% static 'landing/css/lindy-uikit.css' %}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      /* Navigation Bar Styles */
-      .navbar-area {
-        background: linear-gradient(135deg,rgb(145, 151, 235) 0%,rgb(152, 167, 245) 100%);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 15px 0;
-        position: sticky;
-        top: 0;
-        z-index: 999;
-      }
-      
-      .navbar-brand img {
-        transition: all 0.3s ease;
-      }
-      
-      .navbar-brand:hover img {
-        transform: scale(1.05);
-      }
-      
-      .nav-item a {
-        color: white !important;
-        font-weight: 500;
-        padding: 8px 15px;
-        margin: 0 5px;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-      }
-      
-      .nav-item a:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-      }
-      
-      .nav-item a.active {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-      
-      /* Banner Slider Styles */
-      #carouselExampleControls {
-        margin-top: 0; /* No margin needed since navbar is sticky */
-        height: 900px;
-        width: 100%;
-        overflow: hidden;
-        position: relative;
-      }
-      
-      .carousel-inner {
-        height: 100%;
-      }
-      
-      .carousel-item {
-        height: 100%;
-      }
-      
-      .carousel-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      
-      .carousel-control-prev,
-      .carousel-control-next {
-        width: 5%;
-      }
-      
-      /* Ensure content starts after banner */
-      .hero-section-wrapper-5 {
-        padding-top: 20px;
-      }
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-color: #1f2937;
+            --light-bg: #f3f4f6;
+            --white: #ffffff;
+            --header-height: 80px;
+            --border-color: #e5e7eb;
+            --section-padding: 4rem;
+            --footer-padding: 5rem;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .navbar-area {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            height: var(--header-height);
+        }
+
+        .navbar-area.scrolled {
+            background: var(--white);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            height: var(--header-height);
+            padding: 0 1rem;
+        }
+
+        .navbar-brand {
+            padding: 0;
+            margin-right: 2rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav {
+            align-items: center;
+        }
+
+        .nav-item {
+            margin: 0 0.5rem;
+        }
+
+        .nav-item a {
+            color: var(--text-color) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .nav-item a:hover {
+            color: var(--primary-color) !important;
+            background-color: var(--light-bg);
+        }
+
+        .nav-item a.active {
+            color: var(--primary-color) !important;
+            background-color: var(--light-bg);
+        }
+
+        .header-action {
+            margin-left: 2rem;
+        }
+
+        .hero-section {
+            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .hero-content-wrapper {
+            padding: 2rem 0;
+        }
+
+        .hero-content-wrapper h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .hero-content-wrapper p {
+            font-size: 1.25rem;
+            color: #4b5563;
+            margin-bottom: 2rem;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: var(--secondary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .service-categories {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        .category-card {
+            background: var(--white);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-bg);
+            border-radius: 50%;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .feature-section {
+            padding: 5rem 0;
+            background: var(--light-bg);
+        }
+
+        .single-feature {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .single-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonials-section {
+            padding: 5rem 0;
+            background: var(--white);
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.25rem;
+            color: #4b5563;
+        }
+
+        .footer {
+            background: var(--white);
+            color: var(--text-color);
+            padding: 2.5rem 0 1.25rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0.75rem;
+        }
+
+        .footer h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .footer p {
+            color: #4b5563;
+            line-height: 1.4;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 0.875rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .footer-contact li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        .footer-contact i {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            width: 1rem;
+            text-align: center;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            color: var(--text-color);
+            background: var(--light-bg);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .footer-newsletter {
+            margin-top: 1rem;
+        }
+
+        .footer-newsletter .form-control {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            height: auto;
+        }
+
+        .footer-newsletter .form-control::placeholder {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .footer-newsletter .btn-primary {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            color: #4b5563;
+            font-size: 0.75rem;
+        }
+
+        .footer-bottom a {
+            color: #4b5563;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+        }
+
+        .footer-bottom a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer .row {
+            margin: 0 -0.5rem;
+        }
+
+        .footer .col-lg-4,
+        .footer .col-lg-2,
+        .footer .col-lg-3 {
+            padding: 0 0.5rem;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: var(--white);
+                padding: 1rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                margin-top: 1rem;
+            }
+
+            .nav-item {
+                margin: 0.5rem 0;
+            }
+
+            .header-action {
+                margin: 1rem 0 0;
+            }
+
+            .footer {
+                padding: 2rem 0 1rem;
+            }
+
+            .footer .col-lg-4,
+            .footer .col-lg-2,
+            .footer .col-lg-3 {
+                margin-bottom: 1.25rem;
+            }
+
+            .footer-bottom {
+                text-align: center;
+            }
+
+            .footer-bottom .text-md-end {
+                text-align: center !important;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* Contact Section Styles */
+        .contact {
+            padding: 2.5rem 0;
+            background: var(--white);
+        }
+
+        .contact .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0.75rem;
+        }
+
+        .contact h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .contact p {
+            color: #4b5563;
+            line-height: 1.4;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+
+        .form-floating label {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .form-control {
+            height: auto;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--border-color);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1);
+        }
+
+        .form-floating>.form-control:focus~label,
+        .form-floating>.form-control:not(:placeholder-shown)~label {
+            color: var(--primary-color);
+            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        }
+
+        .btn-primary {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 991.98px) {
+            .contact {
+                padding: 2rem 0;
+            }
+
+            .contact-form {
+                padding: 1.25rem;
+            }
+
+            .form-floating {
+                margin-bottom: 0.75rem;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
+    <!-- Preloader -->
     <div class="preloader">
-      <div class="loader">
-        <div class="spinner">
-          <div class="spinner-container">
-            <div class="spinner-rotator">
-              <div class="spinner-left">
-                <div class="spinner-circle"></div>
-              </div>
-              <div class="spinner-right">
-                <div class="spinner-circle"></div>
-              </div>
+        <div class="loader">
+            <div class="spinner">
+                <div class="spinner-container">
+                    <div class="spinner-rotator">
+                        <div class="spinner-left">
+                            <div class="spinner-circle"></div>
+                        </div>
+                        <div class="spinner-right">
+                            <div class="spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    <!-- ========================= preloader end ========================= -->
 
-    <!-- ========================= hero-section-wrapper-5 start ========================= -->
-    <section id="home" class="hero-section-wrapper-5">
-
-      <!-- ========================= header-6 start ========================= -->
-      <header class="header header-6">
+    <!-- Header -->
+    <header class="header">
         <div class="navbar-area">
-          <div class="container">
-            <div class="row align-items-center">
-              <div class="col-lg-12">
+            <div class="container">
                 <nav class="navbar navbar-expand-lg">
-                  <a class="navbar-brand" href="index.html">
-                    <img src={%static "landing/img/logo/logo1.png"%} alt="Logo" style="width: 200px; height: auto;" />
-                  </a>
-                  <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent6">
-                    <ul id="nav6" class="navbar-nav ms-auto">
-                      <li class="nav-item">
-                        <a class="page-scroll active" href="#home">Home</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="page-scroll" href="#feature">Feature</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="page-scroll" href="#about">About</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="page-scroll" href="#contact">Contact</a>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div class="header-action d-flex">
-                    
-                  </div>
-                  <!-- navbar collapse -->
+                    <a class="navbar-brand" href="#home">
+                        <img src="{% static 'landing/img/logo/logo1.png' %}" alt="Blue Caller Logo" />
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#home">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#services">Services</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#features">Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#testimonials">Testimonials</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#contact">Contact</a>
+                            </li>
+                        </ul>
+                        <div class="header-action">
+                            <a href="{% url 'handle-login' %}" class="button">Get Started</a>
+                        </div>
+                    </div>
                 </nav>
-                <!-- navbar -->
-              </div>
             </div>
-            <!-- row -->
-          </div>
-          <!-- container -->
         </div>
-        <!-- navbar area -->
-      </header>
-      
-      <!-- Banner Slider -->
-      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="{% static 'landing/img/logo/plumber.png' %}" class="d-block w-100" alt="Plumber"> 
-          </div>
-          <div class="carousel-item">
-            <img src="{% static 'landing/img/logo/electrician.jpg' %}" class="d-block w-100" alt="Electrician">
-          </div>
-          <div class="carousel-item">
-            <img src="{% static 'landing/img/logo/carpenter.jpg' %}" class="d-block w-100" alt="Carpenter">
-          </div>
-          <div class="carousel-item">
-            <img src="{% static 'landing/img/logo/painter.jpeg' %}" class="d-block w-100" alt="Painter">
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
-      <!-- End Banner Slider -->
+    </header>
 
-      <div class="hero-section hero-style-5 img-bg" style="background-image: url('{% static 'landing/img/hero/hero-5/hero-bg.svg' %}')">
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-lg-6">
                     <div class="hero-content-wrapper">
-                        <h2 class="mb-30 wow fadeInUp" data-wow-delay=".2s">Book an appointment with Verified Workers</h2>
-                        <p class="mb-30 wow fadeInUp" data-wow-delay=".4s">Platform where you can book skilled labor, benefiting both customers seeking reliable service and workers seeking job opportunities.</p>
-                        <a href="{% url 'handle-login' %}" class="button button-lg radius-50 wow fadeInUp" data-wow-delay=".6s">Get Started <i class="lni lni-chevron-right"></i></a>
+                        <h2>Find Trusted Skilled Workers for Your Home</h2>
+                        <p>Connect with verified professionals for all your home service needs. From plumbing to electrical work, we've got you covered.</p>
+                        <a href="{% url 'handle-login' %}" class="button">
+                            Book Now <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="col-lg-6 align-self-end">
-                    <div class="hero-image wow fadeInUp" data-wow-delay=".5s">
-                        <img src="{% static 'landing/img/Picture1.svg' %}" alt="">
+                <div class="col-lg-6">
+                    <img src="{% static 'landing/img/Picture1.svg' %}" alt="Hero Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="service-categories">
+        <div class="container">
+            <div class="section-title">
+                <h3>Our Services</h3>
+                <p>Find the right professional for your needs</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        <h4>Plumbing</h4>
+                        <p>Expert plumbing services for your home</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h4>Electrical</h4>
+                        <p>Professional electrical work and repairs</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <h4>Carpentry</h4>
+                        <p>Quality woodwork and furniture repairs</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="category-card">
+                        <div class="category-icon">
+                            <i class="fas fa-paint-roller"></i>
+                        </div>
+                        <h4>Painting</h4>
+                        <p>Interior and exterior painting services</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <section id="feature" class="feature-section feature-style-5">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-xxl-5 col-xl-5 col-lg-7 col-md-8">
-            <div class="section-title text-center mb-60">
-              <h3 class="mb-15 wow fadeInUp" data-wow-delay=".2s">Providing</h3>
-              <p class="wow fadeInUp" data-wow-delay=".4s">Why choose us?</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4 col-md-6">
-            <div class="single-feature wow fadeInUp" data-wow-delay=".2s">
-              <div class="icon">
-                <i class="lni lni-vector"></i>
-                <svg width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M110 54.7589C110 85.0014 85.3757 66.2583 55 66.2583C24.6243 66.2583 0 85.0014 0 54.7589C0 24.5164 24.6243 0 55 0C85.3757 0 110 24.5164 110 54.7589Z" fill="#EBF4FF"/>
-                  </svg>                  
-              </div>
-              <div class="content">
-                <h5>Verified Professionals</h5>
-                <p>Every worker on our platform is thoroughly vetted to ensure high-quality service.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-feature wow fadeInUp" data-wow-delay=".4s">
-              <div class="icon">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                <svg width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M110 54.7589C110 85.0014 85.3757 66.2583 55 66.2583C24.6243 66.2583 0 85.0014 0 54.7589C0 24.5164 24.6243 0 55 0C85.3757 0 110 24.5164 110 54.7589Z" fill="#EBF4FF"/>
-                  </svg> 
-              </div>
-              <div class="content">
-                <h5>Wide Range of Services</h5>
-                <p>Plumbers, electricians, carpenters, and more- we invite all skilled trades.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-feature wow fadeInUp" data-wow-delay=".6s">
-              <div class="icon">
-                <i class="fa-solid fa-location-dot"></i>
-                <svg width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M110 54.7589C110 85.0014 85.3757 66.2583 55 66.2583C24.6243 66.2583 0 85.0014 0 54.7589C0 24.5164 24.6243 0 55 0C85.3757 0 110 24.5164 110 54.7589Z" fill="#EBF4FF"/>
-                  </svg> 
-              </div>
-              <div class="content">
-                <h5>Location-Based Ranking</h5>
-                <p>Get matched with the closest professionals, ensuring quick response for your problems.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-feature wow fadeInUp" data-wow-delay=".2s">
-              <div class="icon">
-                <i class="fa-solid fa-handshake-simple"></i>
-                <svg width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M110 54.7589C110 85.0014 85.3757 66.2583 55 66.2583C24.6243 66.2583 0 85.0014 0 54.7589C0 24.5164 24.6243 0 55 0C85.3757 0 110 24.5164 110 54.7589Z" fill="#EBF4FF"/>
-                  </svg> 
-              </div>
-              <div class="content">
-                <h5>Simple and Transparent</h5>
-                <p>No hidden fees, clear rates, and easy bookings. Easy to use for a spectrum of people.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-feature wow fadeInUp" data-wow-delay=".4s">
-              <div class="icon">
-                <i class="lni lni-lock"></i>
-                <svg width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M110 54.7589C110 85.0014 85.3757 66.2583 55 66.2583C24.6243 66.2583 0 85.0014 0 54.7589C0 24.5164 24.6243 0 55 0C85.3757 0 110 24.5164 110 54.7589Z" fill="#EBF4FF"/>
-                  </svg> 
-              </div>
-              <div class="content">
-                <h5>Trust and Reliability</h5>
-                <p>We connect you to workers who are dependable, experienced, and ready to assist.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="single-feature wow fadeInUp" data-wow-delay=".6s">
-              <div class="icon">
-                <i class="fa-solid fa-clock"></i>
-                <svg width="110" height="72" viewBox="0 0 110 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M110 54.7589C110 85.0014 85.3757 66.2583 55 66.2583C24.6243 66.2583 0 85.0014 0 54.7589C0 24.5164 24.6243 0 55 0C85.3757 0 110 24.5164 110 54.7589Z" fill="#EBF4FF"/>
-                  </svg> 
-              </div>
-              <div class="content">
-                <h5>Quick Response Times</h5>
-                <p>Our platform ensures you connect with nearby workers, getting your job started sooner.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </section>
-    <!-- ========================= feature style-5 end ========================= -->
 
-    <!-- ========================= about style-4 start ========================= -->
-    <section id="about" class="about-section about-style-4">
-      <div class="container" >
-        <div class="row align-items-center">
-          <div class="col-xl-5 col-lg-6">
-            <div class="about-content-wrapper">
-              <div class="section-title mb-30">
-                <h3 class="mb-25 wow fadeInUp" data-wow-delay=".2s">Join Us– Whether You're Looking for Help or Offering Your Skills</h3>
-                <p class="wow fadeInUp" data-wow-delay=".3s">At BlueCaller, we welcome both users seeking reliable services and skilled professionals looking to expand their client base.</p>
-              </div>
-              <ul>
-                <li class="wow fadeInUp" data-wow-delay=".35s">
-                  <i class="lni lni-checkmark-circle"></i>
-                  If you’re in need of expert help, we make it simple to find the right professional for the job. Whether it’s plumbing, electrical work, carpentry, or general repairs, our platform connects you with trusted, verified workers in your area. Get the help you need, when you need it.
-                </li>
-                <li class="wow fadeInUp" data-wow-delay=".4s">
-                  <i class="lni lni-checkmark-circle"></i>
-                  Are you a skilled blue-collar professional? Join our community of verified workers and get access to clients who need your expertise. We offer flexible opportunities to work at your convenience, increase your visibility, and grow your client base.
-                </li>
-              </ul>
-              <a href="#0" class="button button-lg radius-10 wow fadeInUp" data-wow-delay=".5s">Learn More</a>
+    <!-- Features Section -->
+    <section id="features" class="feature-section">
+        <div class="container">
+            <div class="section-title">
+                <h3>Why Choose Us</h3>
+                <p>Experience the best service with our platform</p>
             </div>
-          </div>
-          <div class="col-xl-7 col-lg-6">
-            <div class="about-image text-lg-right wow fadeInUp" data-wow-delay=".5s" class="worker">
-              <img src="{% static 'landing/img/Picture2.png' %}" alt="" style="width:75%; height:auto;">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="single-feature">
+                        <div class="icon mb-4">
+                            <i class="fas fa-user-check fa-2x text-primary"></i>
+                        </div>
+                        <h4>Verified Professionals</h4>
+                        <p>Every worker is thoroughly vetted and verified for your peace of mind.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="single-feature">
+                        <div class="icon mb-4">
+                            <i class="fas fa-clock fa-2x text-primary"></i>
+                        </div>
+                        <h4>Quick Response</h4>
+                        <p>Get matched with nearby professionals for faster service.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="single-feature">
+                        <div class="icon mb-4">
+                            <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                        </div>
+                        <h4>Secure Payments</h4>
+                        <p>Safe and secure payment system for all transactions.</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
-    <section id="contact" class="contact-section contact-style-3" style="background-color: white;">
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-xxl-5 col-xl-5 col-lg-7 col-md-10">
-                  <div class="section-title text-center mb-50">
-                      <h3 class="mb-15">Get in touch</h3>
-                      <p>Have any questions or need assistance? We’re here to help! Whether you're looking to book a service, need support with your account, or want to learn more about joining our platform, don't hesitate to reach out.</p>
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-8">
-                  <div class="contact-form-wrapper">
-                      <form action="" method="POST">  <!-- Update the action -->
-                          <!-- Include CSRF token for security -->
-                          <div class="row">
-                              <div class="col-md-6">
-                                  <div class="single-input">
-                                      <input type="text" id="name" name="name" class="form-input" placeholder="Name" required>
-                                      <i class="lni lni-user"></i>
-                                  </div>
-                              </div>
-                              <div class="col-md-6">
-                                  <div class="single-input">
-                                      <input type="email" id="email" name="email" class="form-input" placeholder="Email" required>
-                                      <i class="lni lni-envelope"></i>
-                                  </div>
-                              </div>
-                              <div class="col-md-6">
-                                  <div class="single-input">
-                                      <input type="text" id="number" name="number" class="form-input" placeholder="Number" required>
-                                      <i class="lni lni-phone"></i>
-                                  </div>
-                              </div>
-                              <div class="col-md-6">
-                                  <div class="single-input">
-                                      <input type="text" id="subject" name="subject" class="form-input" placeholder="Subject" required>
-                                      <i class="lni lni-text-format"></i>
-                                  </div>
-                              </div>
-                              <div class="col-md-12">
-                                  <div class="single-input">
-                                      <textarea name="message" id="message" class="form-input" placeholder="Message" rows="6" required></textarea>
-                                      <i class="lni lni-comments-alt"></i>
-                                  </div>
-                              </div>
-                              <div class="col-md-12">
-                                  <div class="form-button">
-                                      <button type="submit" class="button"> <i class="lni lni-telegram-original"></i> Submit</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-  
-              <div class="col-lg-4">
-                  <div class="left-wrapper">
-                      <div class="row">
-                          <div class="col-lg-12 col-md-6">
-                              <div class="single-item">
-                                  <div class="icon">
-                                      <i class="lni lni-phone"></i>
-                                  </div>
-                                  <div class="text">
-                                      <p>+977 9843041188</p>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-12 col-md-6">
-                              <div class="single-item">
-                                  <div class="icon">
-                                      <i class="lni lni-envelope"></i>
-                                  </div>
-                                  <div class="text">
-                                      <p>bluecaller@gmail.com</p>
-                                      <p>admin@bluecaller.com</p>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-12 col-md-6">
-                              <div class="single-item">
-                                  <div class="icon">
-                                      <i class="lni lni-map-marker"></i>
-                                  </div>
-                                  <div class="text">
-                                      <p>Nist College, Banepa, Kavre</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </section>
-  <!-- ========================= contact-style-3 end ========================= -->
-  
-   <!-- ========================= footer style-4 start ========================= -->
-  <footer class="footer footer-style-4">
-      <div class="copyright-wrapper wow fadeInUp" data-wow-delay=".2s">
-          <p>Design and Developed by Students of CSIT, Nist College</p>
-      </div>
-  </footer>
-  
-  <a href="#" class="scroll-top"> <i class="lni lni-chevron-up"></i> </a>
-  
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <script src="{% static 'landing/js/tiny-slider.js' %}"></script>
-  <script src="{% static 'landing/js/wow.min.js' %}"></script>
-  <script src="{% static 'landing/js/main.js' %}"></script>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <div class="section-title">
+                <h3>What Our Customers Say</h3>
+                <p>Real experiences from our satisfied customers</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">
+                            <i class="fas fa-user-circle fa-3x text-primary"></i>
+                        </div>
+                        <h5>John Doe</h5>
+                        <p class="text-muted">Homeowner</p>
+                        <p>"Excellent service! The plumber arrived on time and fixed the issue quickly. Highly recommended!"</p>
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">
+                            <i class="fas fa-user-circle fa-3x text-primary"></i>
+                        </div>
+                        <h5>Jane Smith</h5>
+                        <p class="text-muted">Business Owner</p>
+                        <p>"The electrician was professional and knowledgeable. Will definitely use the service again."</p>
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">
+                            <i class="fas fa-user-circle fa-3x text-primary"></i>
+                        </div>
+                        <h5>Mike Johnson</h5>
+                        <p class="text-muted">Property Manager</p>
+                        <p>"Great platform for finding reliable workers. The verification process gives me confidence."</p>
+                        <div class="rating">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section py-5 bg-light">
+        <div class="container">
+            <div class="section-title">
+                <h3>Get in Touch</h3>
+                <p>Have questions? We're here to help</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="contact-form bg-white p-4 rounded shadow-sm">
+                        <form id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+                                        <label for="name">Your Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+                                        <label for="email">Your Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="subject" placeholder="Subject" required>
+                                        <label for="subject">Subject</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control" id="message" placeholder="Your Message" style="height: 150px" required></textarea>
+                                        <label for="message">Your Message</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="button">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <img src="{% static 'landing/img/logo/logo1.png' %}" alt="Logo" class="mb-4" style="height: 40px;">
+                    <p>Connecting skilled workers with those who need their services. Quality, reliability, and trust.</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Contact Info</h5>
+                    <ul class="footer-contact">
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+1234567890">9818110430</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:info@bluecaller.com">umeshtamang129@gmail.com</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Suryabinayak, Bhaktapur, Nepal </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe to our newsletter for updates and offers.</p>
+                    <div class="footer-newsletter">
+                        <form>
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Your email" required>
+                                <button class="btn btn-primary" type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <!-- <p>&copy; 2024 Blue Caller. All rights reserved.</p> -->
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="me-3">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 d-none">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar-area');
+            const backToTop = document.getElementById('backToTop');
+            
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+                backToTop.classList.remove('d-none');
+            } else {
+                navbar.classList.remove('scrolled');
+                backToTop.classList.add('d-none');
+            }
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Back to top button
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Form validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add your form submission logic here
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+    </script>
 </body>
 </html>
