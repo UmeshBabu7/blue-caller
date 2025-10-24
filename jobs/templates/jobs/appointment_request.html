@@ -1,0 +1,427 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Appointment Form</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    cursor: none;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #d0e6f6 0%, #f0c6fc 100%);
+  }
+
+  /* Cursor */
+  .cursor-dot { width: 8px; height: 8px; background: #2D3748; border-radius: 50%; z-index: 1000; }
+  .cursor-circle { width: 50px; height: 50px; border: 2px solid rgba(45,55,72,0.3); border-radius: 50%; z-index: 999; }
+
+  /* Glass card */
+  .glass-card {
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.15);
+    border-radius: 2rem;
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+    padding: 2.5rem;
+  }
+
+  /* Header gradient animation */
+  .card-header {
+    text-align: center;
+    position: relative;
+    padding: 2rem 1rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+    background: linear-gradient(135deg, #4FD1C5, #5568FE, #FF6B6B);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    color: white;
+    overflow: hidden;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .card-header p { font-size: 1rem; color: rgba(255,255,255,0.85); }
+
+  /* Input fields */
+  input[type="date"], input[type="time"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.6);
+    color: #1a202c;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  input:focus {
+    border-color: #4FD1C5;
+    background: rgba(255,255,255,0.9);
+    color: #1a202c;
+    box-shadow: 0 5px 15px rgba(79,209,197,0.3);
+    transform: scale(1.02);
+    outline: none;
+  }
+
+  /* Buttons */
+  .btn-primary, .btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(90deg, #FF6B6B, #FF8787);
+    color: white;
+    box-shadow: 0 10px 25px rgba(255,107,107,0.25);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(255,107,107,0.45); }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.25);
+    color: #2D3748;
+    border: 1px solid rgba(255,255,255,0.4);
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.35); transform: translateY(-3px); }
+
+  /* Popup */
+  .popup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    text-align: center;
+    z-index: 50;
+    width: 90%;
+    max-width: 350px;
+  }
+  .popup.active { transform: translate(-50%, -50%) scale(1); }
+
+  /* Map Styles */
+  #service-location-map {
+    height: 250px;
+    width: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    margin-top: 1rem;
+    z-index: 5;
+    position: relative;
+  }
+
+  .locate-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .locate-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .locate-btn i {
+    font-size: 1.2rem;
+    color: #4f46e5;
+  }
+
+  .location-info {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+<!-- Bubble Particles -->
+<div id="particles-container" class="fixed inset-0 z-0"></div>
+
+<!-- Custom cursor -->
+<div class="cursor-dot fixed top-0 left-0 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 z-50"></div>
+<div class="cursor-circle fixed top-0 left-0 pointer-events-none transform -translate-x-1/2 -translate-y-1/2 z-50"></div>
+
+<!-- Card -->
+<div class="glass-card floating z-10">
+  <div class="card-header">
+    <h2>Book Your Appointment</h2>
+    <p>with {{ worker.name }}</p>
+  </div>
+
+  <!-- Form -->
+  <form id="appointment-form" method="POST" action="{% url 'appoint-worker' worker.id %}" class="space-y-6">
+    {% csrf_token %}
+    <div>
+      <label for="appointment_date" class="block mb-2 text-black font-medium">Appointment Date</label>
+      <input type="date" name="appointment_date" required min="{{ min_date }}">
+    </div>
+    <div>
+      <label for="appointment_time" class="block mb-2 text-black font-medium">Appointment Time</label>
+      <input type="time" id="appointment_time" name="appointment_time" min="09:00" max="18:00" required>
+    </div>
+
+    <!-- Service Location Section -->
+    <div>
+      <label class="block mb-2 text-black font-medium">Service Location</label>
+      <p class="text-sm text-gray-700 mb-2">Click on the map to select where you need service</p>
+      
+      <div class="relative">
+        <div id="service-location-map"></div>
+        <button class="locate-btn" type="button" onclick="locateUser()" aria-label="Use my current location">
+          <i class="fas fa-location-arrow"></i>
+        </button>
+      </div>
+      
+      <div class="location-info">
+        <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>
+        <span id="location-coordinates">Lat: 0.0000, Lng: 0.0000</span>
+      </div>
+      
+      <input type="hidden" name="service_latitude" id="service_latitude" required>
+      <input type="hidden" name="service_longitude" id="service_longitude" required>
+    </div>
+
+    <div class="flex gap-4 mt-4">
+      <button type="submit" class="btn-primary flex-1">
+        <i class="fas fa-paper-plane"></i> Send Request
+      </button>
+      <a id="back-to-profile" href="{% url 'worker-detail' worker.id %}" class="btn-secondary flex-1">
+        <i class="fas fa-arrow-left"></i> Back to Profile
+      </a>
+    </div>
+  </form>
+</div>
+
+<!-- Popup -->
+{% if messages %}
+  {% for message in messages %}
+    {% if message.tags == 'success' %}
+    <div id="success-popup" class="popup active">
+      <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+      <h3 class="text-lg font-semibold mb-2">Appointment Successful!</h3>
+      <p class="text-gray-600 mb-4">Your request has been sent to {{ worker.name }}.</p>
+      <a href="{% url 'worker-detail' worker.id %}" class="btn-primary w-full">
+        Back to Profile
+      </a>
+    </div>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+<script>
+  // Cursor
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorCircle = document.querySelector('.cursor-circle');
+  let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+
+  document.addEventListener('mousemove', (e)=> { 
+    mouseX = e.clientX; 
+    mouseY = e.clientY; 
+  });
+
+  gsap.ticker.add(()=> {
+    gsap.set(cursorDot,{x:mouseX,y:mouseY});
+    circleX += (mouseX-circleX)*0.15;
+    circleY += (mouseY-circleY)*0.15;
+    gsap.set(cursorCircle,{x:circleX,y:circleY});
+  });
+
+  // 🌸 Bubble Background
+  const container = document.getElementById('particles-container');
+  const colors = ['rgba(255,107,107,0.3)','rgba(79,209,197,0.3)','rgba(85,104,254,0.25)','rgba(249,220,92,0.25)'];
+
+  for(let i=0;i<25;i++){
+    const bubble=document.createElement('div');
+    const size=Math.random()*30+20;
+    bubble.style.width=bubble.style.height=size+'px';
+    bubble.style.left=Math.random()*100+'%';
+    bubble.style.top=(Math.random()*100+100)+'%'; // start below
+    bubble.style.borderRadius='50%';
+    bubble.style.position='absolute';
+    bubble.style.background=colors[Math.floor(Math.random()*colors.length)];
+    bubble.style.opacity=Math.random()*0.6+0.2;
+    container.appendChild(bubble);
+
+    gsap.to(bubble,{
+      y: -(window.innerHeight+200),
+      x: "+=" + (Math.random()*200-100),
+      duration: Math.random()*15+10,
+      repeat:-1,
+      delay: Math.random()*5,
+      ease:"sine.inOut"
+    });
+  }
+
+  // Animate card entrance
+  gsap.from(".glass-card", {opacity:0, y:50, duration:1, ease:"power3.out"});
+
+  // 🌟 Parallax effect on appointment card
+  const card = document.querySelector(".glass-card");
+  document.addEventListener("mousemove", (e) => {
+    const { innerWidth, innerHeight } = window;
+    const moveX = (e.clientX / innerWidth - 0.5) * 20;  // range: -10 to +10
+    const moveY = (e.clientY / innerHeight - 0.5) * 20; // range: -10 to +10
+    gsap.to(card, {
+      x: moveX,
+      y: moveY,
+      duration: 0.5,
+      ease: "power2.out"
+    });
+  });
+
+  // Map initialization
+  let map, marker;
+  
+  // Initialize map with default coordinates (Kathmandu)
+  function initMap() {
+    map = L.map('service-location-map').setView([27.7172, 85.3240], 13);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Add click event to map
+    map.on('click', function(e) {
+      updateLocation(e.latlng.lat, e.latlng.lng);
+      showNotification('Location selected!', 'info');
+    });
+
+    // Try to get user's current location
+    locateUser();
+  }
+
+  function updateLocation(lat, lng) {
+    // Format coordinates to 4 decimal places
+    const formattedLat = lat.toFixed(4);
+    const formattedLng = lng.toFixed(4);
+    
+    // Update coordinates display
+    document.getElementById('location-coordinates').textContent = `Lat: ${formattedLat}, Lng: ${formattedLng}`;
+    
+    // Update hidden form fields
+    document.getElementById('service_latitude').value = lat;
+    document.getElementById('service_longitude').value = lng;
+    
+    // Update or create marker
+    if (marker) {
+      marker.setLatLng([lat, lng]);
+    } else {
+      marker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          className: 'custom-marker',
+          html: '<i class="fas fa-map-marker-alt" style="color: #FF6B6B; font-size: 32px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);"></i>',
+          iconSize: [40, 40],
+          iconAnchor: [20, 40]
+        })
+      }).addTo(map)
+      .bindPopup("<b>Service Location</b><br>This is where the worker will come.").openPopup();
+    }
+    
+    // Center map on selected location
+    map.setView([lat, lng], 15);
+  }
+
+  function locateUser() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          updateLocation(lat, lng);
+          showNotification('Your location has been detected!', 'success');
+        },
+        function(error) {
+          console.log("Geolocation error:", error);
+          // Set default location if geolocation fails
+          updateLocation(27.7172, 85.3240);
+          showNotification('Using default location. Click on the map to select your service location.', 'info');
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 60000 }
+      );
+    } else {
+      // Set default location if geolocation is not supported
+      updateLocation(27.7172, 85.3240);
+      showNotification('Geolocation not supported. Click on the map to select your service location.', 'info');
+    }
+  }
+
+  function showNotification(message, type) {
+    // Create a simple notification (you can enhance this with a proper notification system)
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-4 py-2 rounded-lg shadow-lg text-white font-medium z-50 ${
+      type === 'success' ? 'bg-green-500' : 
+      type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+    }`;
+    notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} mr-2"></i>${message}`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 3000);
+  }
+
+  // Initialize the map when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+    
+    // Add form validation to ensure location is selected
+    const form = document.getElementById('appointment-form');
+    form.addEventListener('submit', function(e) {
+      const lat = document.getElementById('service_latitude').value;
+      const lng = document.getElementById('service_longitude').value;
+      
+      if (!lat || !lng) {
+        e.preventDefault();
+        showNotification('Please select a service location on the map.', 'error');
+        return false;
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

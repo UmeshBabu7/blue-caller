@@ -1,0 +1,1246 @@
+{% extends 'jobs/_base.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+/* ================== GLOBAL STYLES ================== */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --secondary: #059669;
+    --accent: #dc2626;
+    --success: #16a34a;
+    --warning: #ea580c;
+    --light: #f8fafc;
+    --dark: #0f172a;
+    --gray: #64748b;
+    --light-gray: #e2e8f0;
+    --white: #ffffff;
+    --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --gradient-secondary: linear-gradient(135deg, #059669 0%, #047857 100%);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ================== HEADER STYLES ================== */
+.service-header {
+    background: var(--white);
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--light-gray);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.back-btn {
+    background: var(--light-gray);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.back-btn:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    background: var(--gradient-primary);
+}
+
+.service-title {
+    flex: 1;
+}
+
+.service-title h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin: 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.service-title p {
+    color: var(--gray);
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* ================== SERVICE NAVIGATION ================== */
+.service-nav-container {
+    max-width: 1200px;
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
+}
+
+.service-nav {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.service-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.service-nav-item {
+    padding: 1rem 2rem;
+    background: var(--white);
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    color: var(--gray);
+    font-size: 1rem;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.service-nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.service-nav-item.active {
+    color: white;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.service-nav-item.active::before {
+    left: 0;
+}
+
+.service-nav-item:hover:not(.active) {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ================== EXPERT ASSISTANCE BANNER ================== */
+.expert-banner {
+    max-width: 1200px;
+    margin: 0 auto 2rem auto;
+    padding: 0 1rem;
+}
+
+.assistance-card {
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+
+.assistance-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.assistance-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.assistance-icon {
+    width: 70px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.assistance-text h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.assistance-text p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.assistance-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.assistance-btn {
+    background: var(--white);
+    color: var(--primary);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+.assistance-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-xl);
+    color: var(--primary);
+}
+
+/* ================== SERVICE CARDS ================== */
+.services-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.service-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.4s ease;
+    border: 1px solid var(--light-gray);
+    position: relative;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+.service-card:hover::before {
+    transform: scaleX(1);
+}
+
+.service-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: var(--light-gray);
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-image {
+    transform: scale(1.05);
+}
+
+.service-content {
+    padding: 1.5rem;
+    position: relative;
+}
+
+.service-title-card {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.service-price {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    color: var(--primary);
+}
+
+.service-duration {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.service-duration svg {
+    color: var(--primary);
+    width: 16px;
+    height: 16px;
+}
+
+.service-description {
+    color: var(--gray);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+
+.service-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.service-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.service-features li::before {
+    content: "✓";
+    color: var(--success);
+    font-weight: bold;
+    font-size: 1rem;
+    flex-shrink: 0;
+    background: var(--success);
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+}
+
+.book-service-btn {
+    width: 100%;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    box-shadow: var(--shadow-md);
+}
+
+.book-service-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* ================== SERVICE SPECS ================== */
+.service-specs {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 4px solid var(--primary);
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.spec-item:last-child {
+    margin-bottom: 0;
+}
+
+.spec-label {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.spec-value {
+    color: var(--gray);
+}
+
+.special-offer {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #000;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    text-align: center;
+    border: 2px dashed #ffc107;
+}
+
+.offer-badge {
+    background: #dc2626;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #666;
+    margin-right: 0.5rem;
+}
+
+.offer-price {
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ================== BOOKING MODAL ================== */
+.booking-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.booking-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: 1rem;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+    padding: 0.5rem;
+}
+
+.close-modal:hover {
+    color: var(--dark);
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 0.75rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.submit-booking {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+.submit-booking:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* ================== DYNAMIC PRICING ================== */
+.pricing-calculator {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--light-gray);
+}
+
+.pricing-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pricing-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pricing-input label {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.9rem;
+}
+
+.pricing-input input, .pricing-input select {
+    padding: 0.75rem;
+    border: 2px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.pricing-input input:focus, .pricing-input select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.calculate-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.price-result {
+    background: var(--gradient-secondary);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: none;
+}
+
+.price-result.show {
+    display: block;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================== RESPONSIVE DESIGN ================== */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .service-title h1 {
+        font-size: 1.5rem;
+    }
+    
+    .assistance-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .assistance-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .assistance-btn {
+        justify-content: center;
+    }
+    
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .service-nav {
+        gap: 0.25rem;
+    }
+    
+    .service-nav-item {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .modal-content {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+    }
+}
+</style>
+
+<!-- ================== SERVICE HEADER ================== -->
+<div class="service-header">
+    <div class="header-content">
+        <button class="back-btn" onclick="history.back()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        
+        <div class="service-icon" id="service-icon">
+            {% if categories_data.0.icon %}
+                {{ categories_data.0.icon }}
+            {% else %}
+                ⚡
+            {% endif %}
+        </div>
+        
+        <div class="service-title">
+            <h1 id="service-title">
+                {% if categories_data %}
+                    {{ categories_data.0.name }}
+                {% else %}
+                    {{ worker_name }} Services
+                {% endif %}
+            </h1>
+            <p id="service-subtitle">{{ worker_tagline }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- ================== SERVICE NAVIGATION ================== -->
+{% if categories_data and categories_data|length > 1 %}
+<div class="service-nav-container">
+    <div class="service-nav" id="service-nav">
+        {% for category in categories_data %}
+            <div class="service-nav-item {% if forloop.first %}active{% endif %}" 
+                 data-category-id="{{ category.id }}">
+                {{ category.name }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- ================== EXPERT ASSISTANCE BANNER ================== -->
+<div class="expert-banner">
+    <div class="assistance-card fade-in">
+        <div class="assistance-content">
+            <div class="assistance-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <div class="assistance-text">
+                <h4>Expert {{ worker_name }} Assistance</h4>
+                <p>Get free consultation and quotes for your project.</p>
+            </div>
+        </div>
+        <div class="assistance-actions">
+            <a href="tel:{{ worker_phone }}" class="assistance-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                Call Now
+            </a>
+            <button class="assistance-btn" onclick="openBookingModal('Schedule Visit', 'Contact for pricing')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                Schedule Visit
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================== SERVICE CONTENT ================== -->
+<div class="services-container">
+    <div class="service-grid" id="service-grid">
+        {% for category in categories_data %}
+            {% for service in category.services %}
+            <div class="service-card" data-category="{{ category.id }}">
+                <!-- Service Image -->
+                {% if service.image %}
+                <img src="{{ service.image }}" alt="{{ service.name }}" class="service-image">
+                {% else %}
+                <img src="https://via.placeholder.com/400x200/f3f4f6/6b7280?text={{ service.name|urlencode }}" 
+                     alt="{{ service.name }}" class="service-image">
+                {% endif %}
+                
+                <div class="service-content">
+                    <h3 class="service-title-card">{{ service.name }}</h3>
+                    <div class="service-price">{{ service.price_display }}</div>
+                    
+                    <!-- Service Duration -->
+                    <div class="service-duration">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        {{ service.duration }}
+                    </div>
+                    
+                    <!-- Service Description -->
+                    <p class="service-description">{{ service.description }}</p>
+                    
+                    {% if service.detailed_description %}
+                    <p class="service-description" style="font-style: italic; color: #666;">
+                        {{ service.detailed_description }}
+                    </p>
+                    {% endif %}
+                    
+                    <!-- Special Offer -->
+                    {% if service.special_offer and service.offer_price %}
+                    <div class="special-offer">
+                        <span class="offer-badge">Special Offer</span>
+                        <span class="original-price">₹{{ service.original_price }}</span>
+                        <span class="offer-price">₹{{ service.offer_price }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Service Specifications -->
+                    <div class="service-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Pricing Type:</span>
+                            <span class="spec-value">{{ service.pricing_type_display }}</span>
+                        </div>
+                        {% if service.min_hours > 1 %}
+                        <div class="spec-item">
+                            <span class="spec-label">Minimum Hours:</span>
+                            <span class="spec-value">{{ service.min_hours }} hours</span>
+                        </div>
+                        {% endif %}
+                        {% if service.night_shift_extra > 0 %}
+                        <div class="spec-item">
+                            <span class="spec-label">Night Shift Extra:</span>
+                            <span class="spec-value">+₹{{ service.night_shift_extra }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="spec-item">
+                            <span class="spec-label">Materials:</span>
+                            <span class="spec-value">
+                                {% if service.materials_included %}Included{% else %}Not included{% endif %}
+                            </span>
+                        </div>
+                        {% if service.experience_level_display %}
+                        <div class="spec-item">
+                            <span class="spec-label">Experience Level:</span>
+                            <span class="spec-value">{{ service.experience_level_display }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Requirements -->
+                    {% if service.requirements and service.requirements != 'Standard requirements apply' %}
+                    <div class="service-specs" style="background: #fff3cd; border-left-color: #ffc107;">
+                        <strong>Requirements:</strong> {{ service.requirements }}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Service Features -->
+                    <ul class="service-features">
+                        {% for feature in service.features %}
+                        <li>{{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <!-- Book Service Button -->
+                    <button class="book-service-btn" 
+                            data-service-id="{{ service.id }}"
+                            data-service-name="{{ service.name }}"
+                            data-service-price="{{ service.price_display }}"
+                            {% if service.base_price == 0 %}data-consultation="true"{% endif %}>
+                        {% if service.base_price == 0 %}
+                        Request Consultation
+                        {% else %}
+                        Book This Service - {{ service.price_display }}
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        {% empty %}
+            <div class="no-services" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                <h3 style="color: var(--gray); margin-bottom: 1rem;">No Services Available</h3>
+                <p style="color: var(--gray); margin-bottom: 2rem;">This worker hasn't set up any services yet. Please contact them directly.</p>
+                <div class="contact-info" style="background: var(--light-gray); padding: 1.5rem; border-radius: 12px;">
+                    <p><strong>Phone:</strong> {{ worker_phone }}</p>
+                    <p><strong>Tagline:</strong> {{ worker_tagline }}</p>
+                    {% if worker_bio %}
+                    <p><strong>About:</strong> {{ worker_bio }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ================== BOOKING MODAL ================== -->
+<div class="booking-modal" id="bookingModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modalTitle">Book Service</h3>
+            <button class="close-modal" id="closeModal">&times;</button>
+        </div>
+        <form class="booking-form" id="bookingForm" action="{% url 'appointment_request' worker.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" id="selectedServiceId" name="service_id">
+            
+            <div class="form-group">
+                <label for="serviceDate">Preferred Date</label>
+                <input type="date" id="serviceDate" name="preferred_date" required min="{{ today }}">
+            </div>
+            
+            <div class="form-group">
+                <label for="serviceTime">Preferred Time</label>
+                <select id="serviceTime" name="preferred_time" required>
+                    <option value="">Select a time</option>
+                    <option value="09:00-11:00">09:00 AM - 11:00 AM</option>
+                    <option value="11:00-13:00">11:00 AM - 01:00 PM</option>
+                    <option value="13:00-15:00">01:00 PM - 03:00 PM</option>
+                    <option value="15:00-17:00">03:00 PM - 05:00 PM</option>
+                    <option value="17:00-19:00">05:00 PM - 07:00 PM</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="serviceAddress">Service Address</label>
+                <textarea id="serviceAddress" name="address" required placeholder="Enter complete address for service" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="specialInstructions">Special Instructions (Optional)</label>
+                <textarea id="specialInstructions" name="special_instructions" placeholder="Any specific requirements or instructions" rows="2"></textarea>
+            </div>
+            
+            <button type="submit" class="submit-booking">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+
+<!-- ================== DYNAMIC PRICING CALCULATOR ================== -->
+<div class="services-container">
+    <div class="pricing-calculator">
+        <h3 style="margin-bottom: 1rem; color: var(--dark); font-size: 1.5rem; font-weight: 700;">Dynamic Pricing Calculator</h3>
+        <div class="pricing-inputs">
+            <div class="pricing-input">
+                <label for="service-area">Service Area (sq ft)</label>
+                <input type="number" id="service-area" placeholder="Enter area" min="1">
+            </div>
+            <div class="pricing-input">
+                <label for="complexity">Complexity Level</label>
+                <select id="complexity">
+                    <option value="basic">Basic</option>
+                    <option value="standard">Standard</option>
+                    <option value="premium">Premium</option>
+                    <option value="luxury">Luxury</option>
+                </select>
+            </div>
+            <div class="pricing-input">
+                <label for="urgency">Urgency</label>
+                <select id="urgency">
+                    <option value="normal">Normal (1-2 days)</option>
+                    <option value="urgent">Urgent (Same day)</option>
+                    <option value="emergency">Emergency (2-4 hours)</option>
+                </select>
+            </div>
+            <div class="pricing-input">
+                <label for="location">Location Type</label>
+                <select id="location">
+                    <option value="residential">Residential</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="industrial">Industrial</option>
+                </select>
+            </div>
+        </div>
+        <button class="calculate-btn" onclick="calculatePrice()">Calculate Price</button>
+        <div class="price-result" id="price-result"></div>
+    </div>
+</div>
+
+<script>
+// Service data from Django template
+const categoriesData = {{ categories_data|safe }};
+const workerData = {
+    id: {{ worker.id }},
+    name: "{{ worker_name }}",
+    tagline: "{{ worker_tagline }}",
+    bio: "{{ worker_bio }}",
+    phone: "{{ worker_phone }}",
+    profilePic: {% if worker_profile_pic %}"{{ worker_profile_pic }}"{% else %}null{% endif %},
+    verified: {{ worker_verified|yesno:"true,false" }}
+};
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Categories Data:', categoriesData);
+    
+    // Initialize service navigation if multiple categories exist
+    if (categoriesData && categoriesData.length > 1) {
+        initializeServiceNavigation();
+    }
+    
+    // Add booking button event listeners
+    attachBookingButtonListeners();
+    
+    // Modal event listeners
+    initializeModal();
+    
+    // Set minimum date for booking
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('serviceDate').setAttribute('min', today);
+});
+
+// Service Navigation Functionality
+function initializeServiceNavigation() {
+    const navItems = document.querySelectorAll('.service-nav-item');
+    console.log('Navigation items found:', navItems.length);
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Update active nav item
+            navItems.forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter services by category
+            const categoryId = this.getAttribute('data-category-id');
+            console.log('Category selected:', categoryId);
+            filterServicesByCategory(categoryId);
+        });
+    });
+}
+
+// Filter services by category
+function filterServicesByCategory(categoryId) {
+    const serviceCards = document.querySelectorAll('.service-card');
+    let hasVisibleServices = false;
+    
+    serviceCards.forEach(card => {
+        if (card.getAttribute('data-category') === categoryId) {
+            card.style.display = 'block';
+            hasVisibleServices = true;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    // Update service title and icon
+    const category = categoriesData.find(cat => cat.id == categoryId);
+    if (category) {
+        document.getElementById('service-title').textContent = category.name;
+        document.getElementById('service-icon').innerHTML = category.icon || '🔧';
+    }
+    
+    console.log('Services filtered for category:', categoryId, 'Visible:', hasVisibleServices);
+}
+
+// Booking Modal Functionality
+function initializeModal() {
+    const modal = document.getElementById('bookingModal');
+    const closeModal = document.getElementById('closeModal');
+    
+    closeModal.addEventListener('click', closeBookingModal);
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeBookingModal();
+        }
+    });
+}
+
+// Attach booking button listeners
+function attachBookingButtonListeners() {
+    document.querySelectorAll('.book-service-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const serviceId = this.getAttribute('data-service-id');
+            const serviceName = this.getAttribute('data-service-name');
+            const servicePrice = this.getAttribute('data-service-price');
+            const isConsultation = this.getAttribute('data-consultation') === 'true';
+            
+            openBookingModal(serviceName, servicePrice, serviceId, isConsultation);
+        });
+    });
+}
+
+// Modal functions
+function openBookingModal(serviceTitle, servicePrice, serviceId = null, isConsultation = false) {
+    const modal = document.getElementById('bookingModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const selectedServiceId = document.getElementById('selectedServiceId');
+    
+    modalTitle.textContent = `Book ${serviceTitle}`;
+    if (serviceId) {
+        selectedServiceId.value = serviceId;
+    }
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeBookingModal() {
+    const modal = document.getElementById('bookingModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Dynamic pricing calculation function
+function calculatePrice() {
+    const area = parseFloat(document.getElementById('service-area').value) || 0;
+    const complexity = document.getElementById('complexity').value;
+    const urgency = document.getElementById('urgency').value;
+    const location = document.getElementById('location').value;
+    
+    if (area === 0) {
+        alert('Please enter service area');
+        return;
+    }
+    
+    // Calculate average base price from available services
+    let totalBasePrice = 0;
+    let serviceCount = 0;
+    
+    categoriesData.forEach(category => {
+        category.services.forEach(service => {
+            if (service.base_price > 0) {
+                totalBasePrice += service.base_price;
+                serviceCount++;
+            }
+        });
+    });
+    
+    const basePrice = serviceCount > 0 ? totalBasePrice / serviceCount : 500;
+    
+    // Complexity multipliers
+    const complexityMultipliers = {
+        'basic': 1.0,
+        'standard': 1.3,
+        'premium': 1.6,
+        'luxury': 2.0
+    };
+    
+    // Urgency multipliers
+    const urgencyMultipliers = {
+        'normal': 1.0,
+        'urgent': 1.5,
+        'emergency': 2.0
+    };
+    
+    // Location multipliers
+    const locationMultipliers = {
+        'residential': 1.0,
+        'commercial': 1.4,
+        'industrial': 1.8
+    };
+    
+    const totalPrice = Math.round(
+        area * (basePrice / 100) *
+        complexityMultipliers[complexity] * 
+        urgencyMultipliers[urgency] * 
+        locationMultipliers[location]
+    );
+    
+    const resultDiv = document.getElementById('price-result');
+    resultDiv.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div style="font-size: 1.5rem; font-weight: 800;">₹${totalPrice.toLocaleString()}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">Estimated Total Price</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.8rem; opacity: 0.8;">Area: ${area} sq ft</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">Complexity: ${complexity}</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">Urgency: ${urgency}</div>
+            </div>
+        </div>
+    `;
+    resultDiv.classList.add('show');
+}
+
+// Add smooth animations
+gsap.from('.service-card', {
+    duration: 0.6,
+    y: 50,
+    opacity: 0,
+    stagger: 0.1,
+    ease: "power2.out"
+});
+
+gsap.from('.assistance-card', {
+    duration: 0.8,
+    y: 30,
+    opacity: 0,
+    ease: "back.out(1.7)"
+});
+</script>
+{% endblock content %}
