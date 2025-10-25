@@ -185,3 +185,13 @@ SITE_ID = 1
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
+# eSewa Payment Gateway Configuration
+ESEWA_MERCHANT_ID = 'EPAYTEST'  # Replace with your actual merchant ID
+ESEWA_SECRET_KEY = '8gBm/:&EnhH.1/q'  # Replace with your actual secret key
+ESEWA_BASE_URL = 'https://uat.esewa.com.np'  # Use production URL in production
+ESEWA_SUCCESS_URL = 'http://localhost:8000/payment/success/'  # Update with your domain
+ESEWA_FAILURE_URL = 'http://localhost:8000/payment/failure/'  # Update with your domain
+
+# Payment Configuration
+INITIAL_PAYMENT_PERCENTAGE = 20  # 20% initial payment
+

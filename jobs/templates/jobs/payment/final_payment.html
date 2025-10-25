@@ -1,0 +1,118 @@
+{% extends 'jobs/base.html' %}
+{% load static %}
+
+{% block title %}Final Payment - {{ appointment.worker.name }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <!-- Header -->
+            <div class="bg-green-600 px-6 py-4">
+                <h1 class="text-2xl font-bold text-white">Final Payment</h1>
+                <p class="text-green-100">Complete your payment</p>
+            </div>
+            
+            <!-- Payment Details -->
+            <div class="p-6">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Appointment Details</h2>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">Worker</p>
+                                <p class="font-medium">{{ appointment.worker.name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Service</p>
+                                <p class="font-medium">{{ appointment.service_subtask.subtask.name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Date & Time</p>
+                                <p class="font-medium">{{ appointment.appointment_date|date:"M d, Y" }} at {{ appointment.appointment_date|time:"g:i A" }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Status</p>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    Completed
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Summary -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Payment Summary</h2>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-600">Total Service Cost:</span>
+                            <span class="font-semibold">₹{{ total_amount }}</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-600">Initial Payment (Paid):</span>
+                            <span class="font-semibold text-green-600">₹{{ initial_amount }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Remaining Amount:</span>
+                            <span class="font-semibold">₹{{ amount }}</span>
+                        </div>
+                        <div class="border-t border-green-200 mt-3 pt-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-bold text-gray-900">Final Payment:</span>
+                                <span class="text-xl font-bold text-green-600">₹{{ amount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Information -->
+                <div class="mb-6">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-green-800">Work Completed</h3>
+                                <div class="mt-2 text-sm text-green-700">
+                                    <p>Your service has been completed successfully. Please complete the final payment to finish the transaction.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Button -->
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <form method="POST" action="{{ payment_request.payment_url }}" class="flex-1">
+                        {% csrf_token %}
+                        <input type="hidden" name="amt" value="{{ payment_request.payment_data.amt }}">
+                        <input type="hidden" name="pdc" value="{{ payment_request.payment_data.pdc }}">
+                        <input type="hidden" name="psc" value="{{ payment_request.payment_data.psc }}">
+                        <input type="hidden" name="txAmt" value="{{ payment_request.payment_data.txAmt }}">
+                        <input type="hidden" name="tAmt" value="{{ payment_request.payment_data.tAmt }}">
+                        <input type="hidden" name="pid" value="{{ payment_request.payment_data.pid }}">
+                        <input type="hidden" name="scd" value="{{ payment_request.payment_data.scd }}">
+                        <input type="hidden" name="su" value="{{ payment_request.payment_data.su }}">
+                        <input type="hidden" name="fu" value="{{ payment_request.payment_data.fu }}">
+                        
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                            Pay ₹{{ amount }} with eSewa
+                        </button>
+                    </form>
+                    
+                    <a href="{% url 'customer_appointments' %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200 text-center">
+                        Back to Appointments
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

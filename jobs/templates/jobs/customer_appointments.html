@@ -294,6 +294,27 @@
       margin-right: 0.5rem;
       margin-bottom: 0.5rem;
     }
+    
+    /* Payment button styles */
+    .btn-payment {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+    
+    .btn-payment:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+    }
+    
+    .btn-partial-payment {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+    
+    .btn-full-payment {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
 
     .btn-delete {
       background: #ef4444;
@@ -448,6 +469,10 @@
           <i class="fas fa-star"></i>
           <span class="nav-text">Reviews</span>
         </a>
+        <a href="{% url 'payment_history' %}" class="nav-item {% if current_page == 'payments' %}active{% endif %}">
+          <i class="fas fa-credit-card"></i>
+          <span class="nav-text">Payment History</span>
+        </a>
         <a href="{% url 'customer_profile' %}" class="nav-item {% if current_page == 'profile' %}active{% endif %}">
           <i class="fas fa-user-circle"></i>
           <span class="nav-text">Profile</span>
@@ -595,6 +620,34 @@
                               <i class="fas fa-check mr-1"></i>Mark Complete
                             </button>
                           </form>
+                        {% endif %}
+
+                        <!-- Payment buttons -->
+                        {% if appointment.service_subtask %}
+                          <!-- Initial payment button -->
+                          {% if not appointment.is_initial_payment_paid %}
+                            <a href="{% url 'initiate_payment' appointment.id %}" class="action-button btn-payment">
+                              <i class="fas fa-credit-card mr-1"></i>Pay Initial (₹{{ appointment.initial_payment_amount|default:0 }})
+                            </a>
+                          {% endif %}
+                          
+                          <!-- Final payment button -->
+                          {% if appointment.status == 'completed' and appointment.is_initial_payment_paid and not appointment.is_final_payment_paid %}
+                            <a href="{% url 'final_payment' appointment.id %}" class="action-button btn-payment">
+                              <i class="fas fa-credit-card mr-1"></i>Pay Final (₹{{ appointment.final_payment_amount|default:0 }})
+                            </a>
+                          {% endif %}
+                          
+                          <!-- Payment status indicators -->
+                          {% if appointment.is_initial_payment_paid and not appointment.is_final_payment_paid %}
+                            <span class="action-button btn-partial-payment">
+                              <i class="fas fa-check-circle mr-1"></i>Initial Paid
+                            </span>
+                          {% elif appointment.is_final_payment_paid %}
+                            <span class="action-button btn-full-payment">
+                              <i class="fas fa-check-circle mr-1"></i>Fully Paid
+                            </span>
+                          {% endif %}
                         {% endif %}
 
                         <!-- Show completed status for completed appointments -->
