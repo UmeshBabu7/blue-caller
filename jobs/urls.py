@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, payment_views  # Changed this line
+from . import views
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
@@ -53,12 +53,4 @@ urlpatterns = [
     path('api/worker-notifications/', views.worker_notifications, name='worker_notifications'),
     path('api/mark-notification-read/', views.mark_notification_read, name='mark_notification_read'),
     path('api/mark-all-notifications-read/', views.mark_all_notifications_read, name='mark_all_notifications_read'),
-    
-    # Payment URLs
-    path('payment/initiate/<int:appointment_id>/', payment_views.initiate_payment, name='initiate_payment'),
-    path('payment/success/', payment_views.payment_success, name='payment_success'),
-    path('payment/failure/', payment_views.payment_failure, name='payment_failure'),
-    path('payment/final/<int:appointment_id>/', payment_views.final_payment, name='final_payment'),
-    path('payment/history/', payment_views.payment_history, name='payment_history'),
-    path('payment/details/<int:payment_id>/', payment_views.payment_details, name='payment_details'),
 ]

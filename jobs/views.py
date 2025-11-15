@@ -1794,13 +1794,8 @@ def appointment_request(request, worker_id):
                 logger.error(f"Email sending failed for appointment {appointment.id}: {email_error}")
                 messages.warning(request, "Appointment created but email notification may have failed.")
             
-            # Redirect to payment if service subtask has pricing
-            if service_subtask:
-                messages.success(request, "Appointment created! Please complete the initial payment to confirm your booking.")
-                return redirect('initiate_payment', appointment_id=appointment.id)
-            else:
-                messages.success(request, "Appointment request sent successfully!")
-                return redirect('customer_appointments')
+            messages.success(request, "Appointment request sent successfully!")
+            return redirect('customer_appointments')
 
         except ValueError as e:
             logger.error(f"Error parsing datetime: {e}")

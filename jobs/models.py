@@ -190,41 +190,6 @@ class Customer(models.Model):
     def __str__(self):
         return f"{self.id} | {self.name}"
 
-# Payment Status Choices
-PAYMENT_STATUS_CHOICES = [
-    ('pending', 'Pending'),
-    ('partial', 'Partial Payment'),
-    ('completed', 'Completed'),
-    ('failed', 'Failed'),
-    ('refunded', 'Refunded'),
-]
-
-# Payment Model
-class Payment(models.Model):
-    PAYMENT_TYPES = [
-        ('initial', 'Initial Payment'),
-        ('final', 'Final Payment'),
-    ]
-    
-    appointment = models.ForeignKey('Appointment', on_delete=models.CASCADE, related_name='payments')
-    payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPES)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='pending')
-    
-    # eSewa specific fields
-    esewa_transaction_id = models.CharField(max_length=100, blank=True, null=True)
-    esewa_ref_id = models.CharField(max_length=100, blank=True, null=True)
-    esewa_status = models.CharField(max_length=20, blank=True, null=True)
-    
-    # Payment tracking
-    payment_request_id = models.CharField(max_length=100, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    paid_at = models.DateTimeField(null=True, blank=True)
-    
-    def __str__(self):
-        return f"{self.payment_type.title()} Payment - {self.appointment} - ₹{self.amount}"
-
 # Appointment Model
 class Appointment(models.Model):
     STATUS_CHOICES = [
@@ -254,37 +219,13 @@ class Appointment(models.Model):
     customer_longitude = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    # Payment related fields
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    initial_payment_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    final_payment_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='pending')
-    
-    def get_initial_payment(self):
-        """Get the initial payment for this appointment"""
-        return self.payments.filter(payment_type='initial').first()
-    
-    def get_final_payment(self):
-        """Get the final payment for this appointment"""
-        return self.payments.filter(payment_type='final').first()
-    
-    def is_initial_payment_paid(self):
-        """Check if initial payment is completed"""
-        initial_payment = self.get_initial_payment()
-        return initial_payment and initial_payment.status == 'completed'
-    
-    def is_final_payment_paid(self):
-        """Check if final payment is completed"""
-        final_payment = self.get_final_payment()
-        return final_payment and final_payment.status == 'completed'
-    
     def can_be_accepted(self):
-        """Check if appointment can be accepted (initial payment must be paid)"""
-        return self.is_initial_payment_paid()
+        """Check if appointment can be accepted"""
+        return True
     
     def can_be_completed(self):
-        """Check if appointment can be completed (both payments must be paid)"""
-        return self.is_initial_payment_paid() and self.is_final_payment_paid()
+        """Check if appointment can be completed"""
+        return True
 
     def mark_worker_completed(self):
         """
